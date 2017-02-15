@@ -33,20 +33,42 @@ def buildLib(collection):
 			else: 
 				dictionary[word] = 1
 
+	print "built succeed!"
 	return dictionary
 
 def strip(word):
 	return word.replace('.', '').replace(',', '').replace('!', '').replace('?', '').replace(':', '').replace('(', '').replace(')', '').replace('<', '').replace('>', '').replace('/', '').replace('\'s', '').replace('ing', '').replace('ed', '').replace('\"', '').replace('\'', '').replace('\'d', '').replace('.<br', '').replace('[', '').replace(']', '').replace('*', '')
 
+def seperateData(data):		# data: [   ['a','b','1'] , ['c','c','1'] , ['d','e','1']   ]
+	data1 = []
+	data0 = []
+	for li in data:
+		if (li[-1] == '1'):
+			data1.append(li)
+		else: 
+			data0.append(li)
+	return [data1, data0]
+
+def countTotal(lib):
+	sum = 0
+	for key in lib:
+		sum += lib[key]
+
+	return sum
 
 
 #~~~~~~~~~~ Main ~~~~~~~~~~#
-collection = readFile(sys.argv[1])	
+trainData = deNoise(readFile(sys.argv[1]))	# [   ['a','b','1'] , ['c','c','1'] , ['d','e','1']   ]
+testData = deNoise(readFile(sys.argv[2]))
 #collection = deNoise(collection)	# [   [['a','b'],'1'] , [['c','c'],'1'] , [['d','e'],'1']   ]
-collection = deNoise(collection)	# [   ['a','b','1'] , ['c','c','1'] , ['d','e','1']   ]
 
-frequencyLib = buildLib(collection)
-print frequencyLib.items()
+frequencyLib = buildLib(trainData)			# print frequencyLib.items()
+freqLibSep = seperateData(trainData)
+frequencyLib1 = buildLib(freqLibSep[0])
+frequencyLib0 = buildLib(freqLibSep[1])
+
+print countTotal(frequencyLib), countTotal(frequencyLib1) + countTotal(frequencyLib0)
+
 
 
 
