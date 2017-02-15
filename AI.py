@@ -70,25 +70,36 @@ def countTotal(lib):
 	return sum
 
 def predict(comment):	# comment: [  ['a','b'] , ['c','c'] , ['d','e']  ]
-	# positive = math.log(pos, 2)
-	# negative = math.log(neg, 2)	
-	p = pos
-	n = neg
-	positive = 0
-	negative = 0
+	print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+	print pos, neg
+	one = two = 0
+	positive = math.log(pos, 2)
+	negative = math.log(neg, 2)
+	# positive = 0
+	# negative = 0
 	for word in comment:
-		if (frequencyLib.has_key(word)):
-			pWord1 = float(frequencyLib[word]) / total1
-			pWord0 = float(frequencyLib[word]) / total0
-			# positive += math.log(pWord1, 2) 
-			# negative += math.log(pWord0, 2)			
-			positive += pWord1
-			negative += pWord0
+		if (word != '1' and word != '0' and frequencyLib.has_key(word)):			# library contains this word
+			if (frequencyLib1.has_key(word) and frequencyLib0.has_key(word)):		# both contain
+				pWord1 = float(frequencyLib1[word]) / total1
+				pWord0 = float(frequencyLib0[word]) / total0
+			elif(frequencyLib1.has_key(word)):										# only 1 contains
+				pWord1 = float(frequencyLib1[word]) / total1
+				pWord0 = pWord1 / 1000		# assign weight to 1/10
+			else:																	# only 0 contains
+				pWord0 = float(frequencyLib0[word]) / total0
+				pWord1 = pWord0 / 1000		# assign weight to 1/10
 
-	positive = p * positive
-	negative = n * negative
+			positive += math.log(pWord1, 2) 
+			negative += math.log(pWord0, 2)	
+			print positive, negative	
 
-	print positive, negative
+			if(math.log(pWord1, 2) > math.log(pWord0, 2)):
+				one += 1
+			else:
+				two += 1 
+			# print 	math.log(pWord1, 2), math.log(pWord0, 2)
+			# positive += pWord1
+			# negative += pWord0
 
 	if(positive > negative):
 		return 1
@@ -109,21 +120,39 @@ def test():
 	print 'realScore: ', realScore
 	print 'predictsc: ', predictScore
 
+	compare(realScore, predictScore)
+
+def compare(li1, li2):
+	right = 0
+	wrong = 0
+	for i in range (len(li1)):
+		if(li1[i] == li2[i]):
+			right += 1
+		else:
+			wrong += 1
+
+	print "right: ", right
+	print "wrong: ", wrong
+	print "percent: ", float(right) / (right + wrong)
+
+
 
 #~~~~~~~~~~ Main ~~~~~~~~~~#
-trainData = deNoise(readFile(sys.argv[1]))	# [   ['a','b','1'] , ['c','c','1'] , ['d','e','1']   ]
-#collection = deNoise(collection)	# [   [['a','b'],'1'] , [['c','c'],'1'] , [['d','e'],'1']   ]
+trainData = deNoise(readFile(sys.argv[1]))	# [   ['a','b','1'] , ['c','c','0'] , ['d','e','1']   ]
+#collection = deNoise(collection)	# [   [['a','b'],'1'] , [['c','c'],'0'] , [['d','e'],'1']   ]
 
 
 
-frequencyLib = buildLib(trainData)			# print frequencyLib.items()
-freqLibSep = seperateData(trainData)
+frequencyLib = buildLib(trainData)		# whole library
+freqLibSep = seperateData(trainData)	
+# print freqLibSep[0], freqLibSep[1]
+
 frequencyLib1 = buildLib(freqLibSep[0])
 frequencyLib0 = buildLib(freqLibSep[1])
 
-total = countTotal(frequencyLib)
-total1 = countTotal(frequencyLib1)
-total0 = countTotal(frequencyLib0)
+total = countTotal(frequencyLib)		# total words
+total1 = countTotal(frequencyLib1)		# total words | 1
+total0 = countTotal(frequencyLib0)		# total words | 0
 
 totalScore = float(frequencyLib['1']) + float(frequencyLib['0'])
 pos = float(frequencyLib['1']) / totalScore		# p(1)
