@@ -14,7 +14,7 @@ def readStopWords(n):
 	return stopwords
 
 def deNoiseSentence(sentence):
-	noise = readStopWords(20)
+	noise = readStopWords(50)
 	words = sentence.split()
 	words = [strip(word) for word in words]	# strip punctuation
 	resultwords  = [word for word in words if word not in noise]	# denoise
@@ -56,19 +56,27 @@ def countTotal(lib):
 
 	return sum
 
+def test():
+	testData = deNoise(readFile(sys.argv[2]))
+	comment = []
+	realScore = []
+	for oneComment in testData:
+		comment.append(oneComment[:-1])
+		realScore.append(oneComment[-1])
+	print 'commnet: ', comment		
+	print 'realScore: ', realScore
+
 
 #~~~~~~~~~~ Main ~~~~~~~~~~#
 trainData = deNoise(readFile(sys.argv[1]))	# [   ['a','b','1'] , ['c','c','1'] , ['d','e','1']   ]
-testData = deNoise(readFile(sys.argv[2]))
 #collection = deNoise(collection)	# [   [['a','b'],'1'] , [['c','c'],'1'] , [['d','e'],'1']   ]
 
-frequencyLib = buildLib(trainData)			# print frequencyLib.items()
+# frequencyLib = buildLib(trainData)			# print frequencyLib.items()
 freqLibSep = seperateData(trainData)
-frequencyLib1 = buildLib(freqLibSep[0])
-frequencyLib0 = buildLib(freqLibSep[1])
+# frequencyLib1 = buildLib(freqLibSep[0])
+# frequencyLib0 = buildLib(freqLibSep[1])
 
-print countTotal(frequencyLib), countTotal(frequencyLib1) + countTotal(frequencyLib0)
-
+test()
 
 
 
