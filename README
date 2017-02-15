@@ -1,0 +1,5 @@
+p(1)*log(sum P(words | 1)) ==> change to log(p(1) + sum P(words | 1)), since the previous one take too many account for p(1), that was why the result was always the same.
+
+found the weight too much in the situation that one word only appear in positive comment or negative comment, I changed /1000 to /10, so a simple word doensn't influence the result too much.
+
+Wrote another python file that can change to parameters, for example change the stop words number (which is read from a file that contains 1000 most common words), I found 75 is will reach the best accuracy.

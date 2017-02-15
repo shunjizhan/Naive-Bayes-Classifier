@@ -27,7 +27,7 @@ def readStopWords(n):
 	return stopwords
 
 def deNoiseSentence(sentence):
-	noise = readStopWords(50)
+	noise = readStopWords(int(sys.argv[3]))
 	words = sentence.split()
 	words = [strip(word) for word in words]	# strip punctuation
 	resultwords  = [word for word in words if word not in noise]	# denoise
@@ -70,8 +70,8 @@ def countTotal(lib):
 	return sum
 
 def predict(comment):	# comment: [  ['a','b'] , ['c','c'] , ['d','e']  ]
-	print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
-	print pos, neg
+	# print '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+	# print pos, neg
 	one = two = 0
 	positive = math.log(pos, 2)
 	negative = math.log(neg, 2)
@@ -84,28 +84,19 @@ def predict(comment):	# comment: [  ['a','b'] , ['c','c'] , ['d','e']  ]
 				pWord0 = float(frequencyLib0[word]) / total0
 			elif(frequencyLib1.has_key(word)):										# only 1 contains
 				pWord1 = float(frequencyLib1[word]) / total1
-				pWord0 = pWord1 / 1000		# assign weight to 1/10
+				pWord0 = pWord1 / 10		# assign weight to 1/10
 			else:																	# only 0 contains
 				pWord0 = float(frequencyLib0[word]) / total0
-				pWord1 = pWord0 / 1000		# assign weight to 1/10
+				pWord1 = pWord0 / 10		# assign weight to 1/10
 
 			positive += math.log(pWord1, 2) 
 			negative += math.log(pWord0, 2)	
-			print positive, negative	
-
-			if(math.log(pWord1, 2) > math.log(pWord0, 2)):
-				one += 1
-			else:
-				two += 1 
-			# print 	math.log(pWord1, 2), math.log(pWord0, 2)
-			# positive += pWord1
-			# negative += pWord0
+			# print positive, negative	
 
 	if(positive > negative):
 		return 1
 	else:
 		return 0	
-
 
 def test():
 	testData = deNoise(readFile(sys.argv[2]))
@@ -117,8 +108,8 @@ def test():
 		realScore.append(int(oneComment[-1]))
 		predictScore.append(predict(oneComment[:-1]))
 	# print 'commnet: ', comment		
-	print 'realScore: ', realScore
-	print 'predictsc: ', predictScore
+	# print 'realScore: ', realScore
+	# print 'predictsc: ', predictScore
 
 	compare(realScore, predictScore)
 
@@ -131,9 +122,10 @@ def compare(li1, li2):
 		else:
 			wrong += 1
 
-	print "right: ", right
-	print "wrong: ", wrong
-	print "percent: ", float(right) / (right + wrong)
+	print "n: {0}".format(sys.argv[3]),
+	print "right: {0}".format(right),
+	print "wrong: {0}".format(wrong),
+	print "percent: {0}".format(float(right) / (right + wrong)) 
 
 
 
