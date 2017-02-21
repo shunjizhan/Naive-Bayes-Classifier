@@ -128,7 +128,9 @@ def compare(li1, li2, num):
 	right = 0
 	wrong = 0
 	for i in range (len(li1)):
-		print li2[i]
+		if (num == 1):
+			print li2[i]
+
 		if(li1[i] == li2[i]):
 			right += 1
 		else:
