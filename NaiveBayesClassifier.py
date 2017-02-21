@@ -58,8 +58,8 @@ def buildLib(collection):
 	return dictionary
 
 def strip(word):
-	# return word;
-	return word.replace('.', '').replace(',', '').replace('!', '').replace('?', '').replace(':', '').replace('(', '').replace(')', '').replace('<', '').replace('>', '').replace('/', '').replace('\'s', '').replace('ing', '').replace('ed', '').replace('\"', '').replace('\'', '').replace('\'d', '').replace('.<br', '').replace('[', '').replace(']', '').replace('*', '')
+	return word;
+	# return word.replace('.', '').replace(',', '').replace('!', '').replace('?', '').replace(':', '').replace('(', '').replace(')', '').replace('<', '').replace('>', '').replace('/', '').replace('\'s', '').replace('ing', '').replace('ed', '').replace('\"', '').replace('\'', '').replace('\'d', '').replace('.<br', '').replace('[', '').replace(']', '').replace('*', '')
 	# return word.replace('.', '').replace(',', '').replace('!', '').replace('?', '').replace(':', '').replace('(', '').replace(')', '').replace('<', '').replace('>', '').replace('/', '').replace('\'s', '').replace('\"', '').replace('\'', '').replace('\'d', '').replace('.<br', '').replace('[', '').replace(']', '').replace('*', '')
 
 def seperateData(data):		# data: [   ['a','b','1'] , ['c','c','1'] , ['d','e','1']   ]
@@ -88,35 +88,35 @@ def predict(comment):	# comment: [  ['a','b'] , ['c','c'] , ['d','e']  ]
 	# positive = 0
 	# negative = 0
 	for word in comment:
-		if (word != '1' and word != '0' and frequencyLib.has_key(word)):			# library contains this word
-			if (frequencyLib1.has_key(word) and frequencyLib0.has_key(word)):		# both contain
-				pWord1 = float(frequencyLib1[word]) / total1
-				pWord0 = float(frequencyLib0[word]) / total0
-			elif(frequencyLib1.has_key(word)):										# only 1 contains
-				pWord1 = float(frequencyLib1[word]) / total1
-				pWord0 = pWord1 / 10		# assign weight to 1/10
-			else:																	# only 0 contains
-				pWord0 = float(frequencyLib0[word]) / total0
-				pWord1 = pWord0 / 10		# assign weight to 1/10
-
-			positive += math.log(pWord1, 2) 
-			negative += math.log(pWord0, 2)	
-			# print positive, negative	
-
 		# if (word != '1' and word != '0' and frequencyLib.has_key(word)):			# library contains this word
 		# 	if (frequencyLib1.has_key(word) and frequencyLib0.has_key(word)):		# both contain
-		# 		pWord1 = (float(frequencyLib1[word]) + 1) / total1
-		# 		pWord0 = (float(frequencyLib0[word]) + 1) / total0
+		# 		pWord1 = float(frequencyLib1[word]) / total1
+		# 		pWord0 = float(frequencyLib0[word]) / total0
 		# 	elif(frequencyLib1.has_key(word)):										# only 1 contains
-		# 		pWord1 = (float(frequencyLib1[word]) + 1) / total1
-		# 		pWord0 = float(1) / total0		# assign weight to 1/10
+		# 		pWord1 = float(frequencyLib1[word]) / total1
+		# 		pWord0 = pWord1 / 10		# assign weight to 1/10
 		# 	else:																	# only 0 contains
-		# 		pWord0 = (float(frequencyLib0[word]) + 1) / total0
-		# 		pWord1 = float(1) / total1		# assign weight to 1/10
+		# 		pWord0 = float(frequencyLib0[word]) / total0
+		# 		pWord1 = pWord0 / 10		# assign weight to 1/10
 
 		# 	positive += math.log(pWord1, 2) 
 		# 	negative += math.log(pWord0, 2)	
 		# 	# print positive, negative	
+
+		if (word != '1' and word != '0' and frequencyLib.has_key(word)):			# library contains this word
+			if (frequencyLib1.has_key(word) and frequencyLib0.has_key(word)):		# both contain
+				pWord1 = (float(frequencyLib1[word]) + 1) / total1
+				pWord0 = (float(frequencyLib0[word]) + 1) / total0
+			elif(frequencyLib1.has_key(word)):										# only 1 contains
+				pWord1 = (float(frequencyLib1[word]) + 1) / total1
+				pWord0 = float(1) / total0		# assign weight to 1/10
+			else:																	# only 0 contains
+				pWord0 = (float(frequencyLib0[word]) + 1) / total0
+				pWord1 = float(1) / total1		# assign weight to 1/10
+
+			positive += math.log(pWord1, 2) 
+			negative += math.log(pWord0, 2)	
+			# print positive, negative	
 
 	if(positive > negative):
 		return 1
