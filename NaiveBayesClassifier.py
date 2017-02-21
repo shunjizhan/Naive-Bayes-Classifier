@@ -1,6 +1,7 @@
 import sys
 import math
 import time
+import operator
 
 global frequencyLib
 global frequencyLib1
@@ -166,6 +167,17 @@ def compare(li1, li2, num):
 		testingAccu = format(float(right) / (right + wrong), '.3f')
 		# print testingAccu
 
+def printMaxTen(dic):
+	maxTen = dict(sorted(dic.iteritems(), key=operator.itemgetter(1), reverse=True)[:12])
+	# i = 0
+	# maxKey = []
+	# for key in dic:
+	# 	if (i < 10):
+	# 		maxKey.append(dic[key])
+	# 		i++
+	# 	else:
+	# 		if ()
+	print maxTen 
 
 
 #~~~~~~~~~~ Main ~~~~~~~~~~#
@@ -207,6 +219,11 @@ print trainingTime, 'seconds (training)'
 print testingTime, 'seconds (labeling)'
 print trainingAccu, '(training)'
 print testingAccu, '(testing)'
+
+# printMaxTen(frequencyLib)
+# printMaxTen(frequencyLib1)
+# printMaxTen(frequencyLib0)
+
 
 
 
