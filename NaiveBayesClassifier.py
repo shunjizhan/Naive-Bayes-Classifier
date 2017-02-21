@@ -17,23 +17,24 @@ global neg
 global trainingTime
 global testingTime
 
+global noise
+
 
 def readFile(filename):
 	lines = [line.rstrip('\n').lower() for line in open(filename)]
 	return lines
 
-def readStopWords(n):
-	stopwords = []
-	f = open("stopwords")
-	for i in range(n):
-	    word = f.next().strip('\n')
-	    stopwords.append(word)
-	f.close()
-	return stopwords
+# def readStopWords(n):
+# 	stopwords = []
+# 	f = open("stopwords")
+# 	for i in range(n):
+# 	    word = f.next().strip('\n')
+# 	    stopwords.append(word)
+# 	f.close()
+# 	return stopwords
 
 def deNoiseSentence(sentence):
 	# noise = readStopWords(int(sys.argv[3]))
-	noise = readStopWords(75)
 	words = sentence.split()
 	words = [strip(word) for word in words]	# strip punctuation
 	resultwords  = [word for word in words if word not in noise]	# denoise
@@ -152,6 +153,11 @@ def compare(li1, li2, num):
 
 #~~~~~~~~~~ Main ~~~~~~~~~~#
 trainStart = time.time()
+
+noiseList = ['the', 'of', 'to', 'and', 'a', 'in', 'is', 'it', 'you', 'that', 'he', 'was', 'for', 'on', 'are', 'with', 'as', 'i', 'his', 'they', 'be', 'at', 'one', 'have', 'this', 'from', 'or', 'had', 'by', 'word', 'what', 'some', 'were', 'there', 'when', 'use', 'your', 'how', 'said', 'an', 'each', 'she', 'which', 'do', 'their', 'time', 'if', 'will', 'way', 'about', 'many', 'then', 'them', 'write', 'would', 'so', 'these', 'her', 'make', 'thing', 'see', 'him', 'two', 'has', 'look', 'day', 'go', 'come', 'did', 'number', 'people', 'my', 'know', 'water', 'call', 'who', 'may', 'been', 'now', 'find', 'any', 'work', 'part', 'take', 'get', 'place', 'made', 'where', 'after', 'round', 'year', 'came', 'show', 'every', 'me', 'give', 'our', 'under', 'name', 'very', 'through', 'just', 'form', 'sentence', 'great', 'think', 'say', 'help', 'low', 'line', 'differ', 'turn', 'cause', 'much', 'mean', 'before', 'move', 'right', 'boy', 'old', 'too', 'same', 'tell', 'does', 'set', 'three', 'want', 'air', 'well', 'also', 'play', 'small', 'end', 'put', 'home', 'read', 'hand', 'port', 'large', 'spell', 'add', 'even', 'land', 'here', 'must', 'big', 'high', 'such', 'follow', 'act', 'why', 'ask', 'men', 'change', 'went', 'light', 'kind', 'off', 'need', 'house', 'picture', 'try', 'us', 'again', 'animal', 'point', 'mother', 'world', 'near', 'build', 'self', 'earth', 'father', 'head', 'stand', 'own', 'page', 'should', 'country', 'found', 'answer', 'school', 'grow', 'study', 'still', 'learn', 'plant', 'cover', 'food', 'sun', 'four', 'between', 'state', 'keep', 'eye', 'never', 'last', 'let', 'thought', 'city']
+noise = []
+for i in range(75):
+	noise.append(noiseList[i])
 
 trainData = deNoise(readFile(sys.argv[1]))	# [   ['a','b','1'] , ['c','c','0'] , ['d','e','1']   ]
 #collection = deNoise(collection)	# [   [['a','b'],'1'] , [['c','c'],'0'] , [['d','e'],'1']   ]
